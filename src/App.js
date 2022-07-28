@@ -3,7 +3,6 @@ import Header from './component/Header';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateData, selectData } from './redux/AppdataSlice'
 import { fetchAppData } from './api-store/api-store';
-import CircularProgress from '@mui/material/CircularProgress';
 import './style/app.css';
 import MerchandiseInfo from './component/MerchandiseInfo.js';
 import LoadingSpinner from './component/LoadingSpinner';
