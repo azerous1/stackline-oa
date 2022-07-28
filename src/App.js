@@ -1,58 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useEffect } from 'react';
+import Header from './component/Header';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateData, selectData } from './redux/AppdataSlice'
+import { fetchAppData } from './api-store/api-store';
+import CircularProgress from '@mui/material/CircularProgress';
+import './style/app.css';
+import MerchandiseInfo from './component/MerchandiseInfo.js';
+import LoadingSpinner from './component/LoadingSpinner';
+import SalesTable from './component/SalesTable';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+    const data = useSelector(selectData)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        console.log("here")
+        const fetch = async () => {
+            try {
+                let data = await fetchAppData()
+                dispatch(updateData(data))
+            } catch (error) {
+                console.log(error.message)
+            }
+        }
+
+        fetch()
+
+    }, [dispatch])
+    return (
+        <div className='app'>
+            <Header />
+
+            <section className='content'>
+                {data.length === 0 ? 
+                    <LoadingSpinner />  :
+                    <div className='content-outer-container'>
+                        <MerchandiseInfo data={data} />
+                        <SalesTable data={data} />
+                    </div>
+                }
+            </section>
+
+            
+
+        </div>
+    );
 }
 
 export default App;
